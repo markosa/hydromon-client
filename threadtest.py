@@ -7,7 +7,6 @@ from time import sleep
 import threading
 import logging
 import sys
-from settings import Settings
 
 root = logging.getLogger()
 root.setLevel(logging.DEBUG)
