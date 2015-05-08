@@ -4,9 +4,11 @@ Created on May 7, 2015
 @author: markos
 '''
 import threading
-from __builtin__ import None
 import thread
 import time
+import logging
+
+log = logging.getLogger(__name__)
 
 class SensorThread(threading.Thread):
     '''
@@ -26,10 +28,12 @@ class SensorThread(threading.Thread):
         threading.Thread.__init__(self)
         self.threadId=threadId
         self.module=module
+        self.readInterval=readInterval
     
     def run(self):
         
         while True:
+            log.debug("Thread %s %s running" % (self.threadId, self.module))
             if (self.exitFlag):
                 thread.exit()
             

@@ -64,7 +64,11 @@ def loadModules():
 def spawnThreads():
     for module in MODULE_INSTANCES:
         ': :type module: net.hydromon.module.prototype.ModulePrototype'
+        
         t = SensorThread("SensorThread #"+module.sensorId, module, ConfigurationUtil.READ_INTERVAL)
+        t.start()
+        log.info("Spawned thread: " + str(t))
+        THREADS.append(t)
         
     
     
@@ -73,6 +77,9 @@ def spawnThreads():
 def main():   
     config = setup()  # @UnusedVariable
     loadModules()
+    spawnThreads()
+    testVar = raw_input("Ask user for something.")
+
     
 if __name__ == '__main__':
     main()
