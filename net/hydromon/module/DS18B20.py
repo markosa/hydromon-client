@@ -6,7 +6,6 @@ Created on May 6, 2015
 
 import net.hydromon.dto.sensordto  # @UnusedImport
 import logging
-import time
 
 log = logging.getLogger(__name__)
 

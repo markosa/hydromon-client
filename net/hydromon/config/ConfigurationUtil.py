@@ -13,6 +13,7 @@ HYDROMON_USERNAME = None
 HYDROMON_APIKEY = None
 HYDROMON_SERVER = None
 READ_INTERVAL = 60
+DATADIR = None
 
 SENSORS = []
 
@@ -42,9 +43,15 @@ def parseSensor(config, section):
 
 
 def parseCommon(config):
-    global HYDROMON_USERNAME, HYDROMON_APIKEY, HYDROMON_SERVER 
+    global HYDROMON_USERNAME, HYDROMON_APIKEY, HYDROMON_SERVER, DATADIR
     HYDROMON_USERNAME = config.get('common', 'username')
     HYDROMON_APIKEY = config.get('common', 'apikey')
     HYDROMON_SERVER = config.get('common', 'hydromon-server')
-    
+    DATADIR = config.get('common', 'data-dir')
 
+   
+def getAddValueEndpointUrl(sensorId):
+    return HYDROMON_SERVER+"/api/sensor/%s/addvalue" % sensorId     
+
+def getEmergencySaveDirectoryForSensor(sensorId):
+    return DATADIR + "/sensor_%s" % sensorId

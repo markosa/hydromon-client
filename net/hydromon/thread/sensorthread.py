@@ -8,13 +8,15 @@ import thread
 import time
 import logging
 
+from net.hydromon.config import ConfigurationUtil
+from net.hydromon.dto.valuedto import ValueDTO
+
 log = logging.getLogger(__name__)
 
 class SensorThread(threading.Thread):
     '''
     classdocs
     '''
-
     threadId = None
     module = None
     value = None
@@ -38,7 +40,8 @@ class SensorThread(threading.Thread):
                 thread.exit()
             
             self.value=self.module.read()
-            self.timestamp=time.time()
+            # self.timestamp=datetime.datetime.now(pytz.timezone('Europe/Helsinki')).isoformat()
+            self.timestamp=time.time()*1000
             time.sleep(self.readInterval)
             
             
@@ -46,7 +49,10 @@ class SensorThread(threading.Thread):
         self.exitFlag=True
         
         
+    def getValue(self):
+        return ValueDTO(self.module.sensorId, self.value, self.timestamp, ConfigurationUtil.HYDROMON_USERNAME, ConfigurationUtil.HYDROMON_APIKEY)
         
-        
-        
+    def reset(self):
+        self.value = None
+        self.timestamp = None
         
