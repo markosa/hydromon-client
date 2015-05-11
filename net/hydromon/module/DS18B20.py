@@ -6,6 +6,7 @@ Created on May 6, 2015
 
 import net.hydromon.dto.sensordto  # @UnusedImport
 import logging
+import time
 
 log = logging.getLogger(__name__)
 
@@ -34,26 +35,29 @@ class DS18B20():
         pass
      
     def readDevice(self): 
-        f = open(self.device, 'r')
-        lines = f.readlines()
-        f.close()
+        lines = None
+        try:
+            f = open(self.device, 'r')
+            lines = f.readlines()
+            f.close()
+        except:
+            log.fatal("Unable to read device: " + self.device)
         return lines
         
     def read(self):
-        '''
+        temp_c = None
         lines = self.readDevice()
-        
-        while lines[0].strip()[-3:] != 'YES':
-            time.sleep(0.2)
-            lines = self.readDevice()
-             
-        equals_pos = lines[1].find('t=')
-        
-        if equals_pos != -1:
-            temp_string = lines[1][equals_pos+2:] 
-            temp_c = float(temp_string) / 1000.0 
-        '''
-        temp_c = 20
+        if lines is not None:
+            while lines[0].strip()[-3:] != 'YES':
+                time.sleep(0.2)
+                lines = self.readDevice()
+                 
+            equals_pos = lines[1].find('t=')
+            
+            if equals_pos != -1:
+                temp_string = lines[1][equals_pos+2:] 
+                temp_c = float(temp_string) / 1000.0 
+
         return temp_c
         
 

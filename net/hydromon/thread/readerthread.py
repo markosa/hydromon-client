@@ -36,9 +36,11 @@ class ReaderThread(threading.Thread):
             
             for t in self.threads:
                 ': :type t: net.hydromon.thread.sensorthread.SensorThread'
-                valueDto = t.getValue()
-                serverclient.send(valueDto)
-                pass
+                if t.timestamp is not None:
+                    valueDto = t.getValue()
+                    serverclient.send(valueDto)
+                else:
+                    log.debug("Thread has not yet processed any data: " + str(t))
             
             time.sleep(self.readInterval)
             

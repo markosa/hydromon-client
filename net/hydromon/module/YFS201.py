@@ -8,6 +8,7 @@ import logging
 from time import sleep
 
 import net.hydromon.dto.sensordto  # @UnusedImport
+import time
 
 
 log = logging.getLogger(__name__)
@@ -57,7 +58,13 @@ class YFS201():
         
     def read(self):
         self.flow_ticks=0
-        sleep(1)
+       
+        # Use while loop instead of sleep(), sleep blocks thread
+        currentTime=time.time()
+        while currentTime+1 > time.time():
+            pass
+  
+        
         flow_frequency = self.flow_ticks
         litres_per_min = (flow_frequency / 7.5); # (Pulse frequency x 60 min) / 7.5Q = flow rate in L/hour 
         log.debug("Sensor is running at " + str(litres_per_min) +"L/min - total ticks in second " + str(flow_frequency))
