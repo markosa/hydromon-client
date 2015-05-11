@@ -30,8 +30,9 @@ class YFS201():
 
 
     def gpio_callback(self,gpio_id, val):
-        log.debug("flow gpio_callback %s: %s" % (gpio_id, val))
         self.flow_ticks = self.flow_ticks + 1
+        log.debug("flow gpio_callback %s: %s total ticks now %s" % (gpio_id, val, self.flow_ticks))
+
    
     def __init__(self, sensor):
         ':type sensor: net.hydromon.dto.sensordto.Sensor'
@@ -46,8 +47,8 @@ class YFS201():
         log.info("Initializing interrupt for pin (RPIO.BCM) #" + str(self.gpio_pin)) 
         try:
             RPIO.setmode(RPIO.BCM)
-            RPIO.setup(self.gpio_pin,RPIO.IN, pull_up_down=RPIO.PUD_UP)
-            RPIO.add_interrupt_callback(self.gpio_pin, self.gpio_callback, edge='rising') 
+            RPIO.setup(int(self.gpio_pin),RPIO.IN, pull_up_down=RPIO.PUD_UP)
+            RPIO.add_interrupt_callback(int(self.gpio_pin), self.gpio_callback, edge='rising') 
             RPIO.wait_for_interrupts(threaded=True)
         except:
             log.error("RPIO library is missing")

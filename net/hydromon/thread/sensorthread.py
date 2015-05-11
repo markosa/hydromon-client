@@ -42,7 +42,7 @@ class SensorThread(threading.Thread):
             self.value=self.module.read()
             # self.timestamp=datetime.datetime.now(pytz.timezone('Europe/Helsinki')).isoformat()
             self.timestamp=time.time()*1000
-            time.sleep(self.readInterval)
+            time.sleep(float(self.readInterval))
             
             
     def stop(self):

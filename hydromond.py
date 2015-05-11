@@ -80,7 +80,7 @@ def spawnThreads():
         log.info("Spawned thread: " + str(t))
         THREADS.append(t)
         
-    readerThread = ReaderThread("Reader#1", THREADS, 20)
+    readerThread = ReaderThread("Reader#1", THREADS, ConfigurationUtil.SEND_INTERVAL)
     readerThread.start()
     
 def initializeDatadirectory():

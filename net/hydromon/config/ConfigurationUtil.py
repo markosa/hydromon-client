@@ -12,7 +12,9 @@ log = logging.getLogger(__name__)
 HYDROMON_USERNAME = None
 HYDROMON_APIKEY = None
 HYDROMON_SERVER = None
-READ_INTERVAL = 60
+READ_INTERVAL = 20
+SEND_INTERVAL = 60
+
 DATADIR = None
 
 SENSORS = []
@@ -43,11 +45,13 @@ def parseSensor(config, section):
 
 
 def parseCommon(config):
-    global HYDROMON_USERNAME, HYDROMON_APIKEY, HYDROMON_SERVER, DATADIR
+    global HYDROMON_USERNAME, HYDROMON_APIKEY, HYDROMON_SERVER, DATADIR, READ_INTERVAL, SEND_INTERVAL
     HYDROMON_USERNAME = config.get('common', 'username')
     HYDROMON_APIKEY = config.get('common', 'apikey')
     HYDROMON_SERVER = config.get('common', 'hydromon-server')
     DATADIR = config.get('common', 'data-dir')
+    READ_INTERVAL = config.get('common', 'read-interval')
+    SEND_INTERVAL = config.get('common', 'send-interval')
 
    
 def getAddValueEndpointUrl(sensorId):

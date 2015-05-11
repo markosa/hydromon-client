@@ -42,7 +42,7 @@ class ReaderThread(threading.Thread):
                 else:
                     log.debug("Thread has not yet processed any data: " + str(t))
             
-            time.sleep(self.readInterval)
+            time.sleep(float(self.readInterval))
             
             
     def stop(self):
