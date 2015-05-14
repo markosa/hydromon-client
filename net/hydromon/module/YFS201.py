@@ -62,7 +62,7 @@ class YFS201():
        
         # Use while loop instead of sleep(), sleep blocks thread
         currentTime=time.time()
-        while currentTime+1 > time.time():
+        while currentTime+10 > time.time():
             pass
   
         
