@@ -1,12 +1,9 @@
 '''
 Created on May 22, 2015
 
-@author: markos
+@author: Marko Sahlman
 '''
-try:
-    import smbus
-except:
-    print "error"
+import smbus
     
 import ConfigParser
 import argparse
@@ -16,6 +13,8 @@ import sys
 class MiniPH(object):
     '''
     classdocs
+    
+    This file is almost 1:1 copied & converted from Sparky's portfolio. 
     
     http://www.sparkyswidgets.com/portfolio-item/miniph-i2c-ph-interface/
     
@@ -93,7 +92,7 @@ class MiniPH(object):
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='Read or calibrate ph probe')
+    parser = argparse.ArgumentParser(description='Read or calibrate ph probe. Calibrate using --ph4 and --ph7 flags. Put probe in ph7 solution and use flag --ph7 then change probe to ph4 solution and use --ph4')
     parser.add_argument('busid', metavar='BUSID', type=int, nargs='?',help='I2C bus id. Ie. 0 or 1')    
     parser.add_argument('address', metavar='ADDRESS', type=str, nargs='?',help='I2C Address. Ie. 0x4d')    
 
@@ -116,16 +115,20 @@ if __name__ == '__main__':
             print str(phi2c.readPH())
         else:
             parser.print_usage()
-            print "\nError: no config file given or it does not exist"
+            print "\nError: no config file given or it does not exist. Calibrate and save config or give new config file location"
+            sys.exit(1)
+
     elif args.ph4:
             phi2c = MiniPH(args.address, args.busid)
             if os.path.exists(args.configfile):
                 phi2c.readConfig(args.configfile)
             phi2c.calibratePH4()
             phi2c.writeConfig(args.configfile)
+            print "Calibrated PH4"
     elif args.ph7:
             phi2c = MiniPH(args.address, args.busid)
             if os.path.exists(args.configfile):
                 phi2c.readConfig(args.configfile)
             phi2c.calibratePH7()
             phi2c.writeConfig(args.configfile)        
+            print "Calibrated PH7"
