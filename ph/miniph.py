@@ -3,7 +3,11 @@ Created on May 22, 2015
 
 @author: Marko Sahlman
 '''
-import smbus
+
+try:
+    import smbus
+except:
+    print "error"
     
 import ConfigParser
 import argparse
@@ -91,7 +95,20 @@ class MiniPH(object):
         self.vref = float(config.get(configsection,'vref'))
 
 
+def interactiveCalibration():
+    print "** CALIBRATION **"
+    
+    
+    raw_input("1. Put sensor in PH7 solution and press enter to calibrate")
+    raw_input("2. Clean sensor and put sensor in PH4 solution and press enter to calibrate")
+  
+        
+    pass
+
 if __name__ == '__main__':
+    
+    interactiveCalibration()
+    
     parser = argparse.ArgumentParser(description='Read or calibrate ph probe. Calibrate using --ph4 and --ph7 flags. Put probe in ph7 solution and use flag --ph7 then change probe to ph4 solution and use --ph4')
     parser.add_argument('busid', metavar='BUSID', type=int, nargs='?',help='I2C bus id. Ie. 0 or 1')    
     parser.add_argument('address', metavar='ADDRESS', type=str, nargs='?',help='I2C Address. Ie. 0x4d')    
@@ -124,11 +141,15 @@ if __name__ == '__main__':
                 phi2c.readConfig(args.configfile)
             phi2c.calibratePH4()
             phi2c.writeConfig(args.configfile)
-            print "Calibrated PH4"
+            print "Calibrated PH4 point and wrote config %s" & args.configfile
     elif args.ph7:
             phi2c = MiniPH(args.address, args.busid)
             if os.path.exists(args.configfile):
                 phi2c.readConfig(args.configfile)
             phi2c.calibratePH7()
             phi2c.writeConfig(args.configfile)        
-            print "Calibrated PH7"
+            print "Calibrated PH7 point and wrote config %s" & args.configfile
+            
+            
+            
+

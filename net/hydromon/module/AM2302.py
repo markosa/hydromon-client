@@ -22,8 +22,7 @@ class AM2302():
     '''
     classdocs
    
-    Read logic copied from this article
-    https://learn.adafruit.com/downloads/pdf/adafruits-raspberry-pi-lesson-11-ds18b20-temperature-sensing.pdf
+    https://github.com/adafruit/Adafruit_Python_DHT
     
     '''
     serial = None

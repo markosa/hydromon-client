@@ -41,7 +41,7 @@ def parseSensors(config):
      
 def parseSensor(config, section):
     global SENSORS
-    SENSORS.append(Sensor(config.get(section, 'id'), config.get(section, 'module'), config.get(section,'gpio_pin'), config.get(section,'serial')))
+    SENSORS.append(Sensor(config.get(section, 'id'), config.get(section, 'module'), config.get(section,'gpio_pin'), config.get(section,'serial'), config.get(section,'module_options')))
 
 
 def parseCommon(config):
