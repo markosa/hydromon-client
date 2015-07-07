@@ -198,7 +198,7 @@ readvalue(PyObject* self, PyObject* args)
         if (GPIORead(gpio_echo_pin) == LOW)
         {
             /* valid reading code */
-            printf("echo at %d micros\n", pulsewidth / 2);
+            // printf("echo at %d micros\n", pulsewidth / 2);
         }
         else
         {

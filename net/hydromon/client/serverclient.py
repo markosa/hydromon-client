@@ -20,7 +20,7 @@ def send(valuedto):
     response = None
     
     try:
-        response = requests.post(endpointUrl, payload)
+        response = requests.post(endpointUrl, payload, timeout=10)
     except ConnectionError as ce:
         log.fatal(ce)
     finally:

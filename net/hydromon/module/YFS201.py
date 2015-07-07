@@ -31,8 +31,7 @@ class YFS201():
 
     def gpio_callback(self,gpio_id, val):
         self.flow_ticks = self.flow_ticks + 1
-        log.debug("flow gpio_callback %s: %s total ticks now %s" % (gpio_id, val, self.flow_ticks))
-
+ 
    
     def __init__(self, sensor):
         ':type sensor: net.hydromon.dto.sensordto.Sensor'
@@ -64,9 +63,12 @@ class YFS201():
         currentTime=time.time()
         while currentTime+10 > time.time():
             pass
-  
         
-        flow_frequency = self.flow_ticks
+        flow_frequency = self.flow_ticks / 10.00
+   
+        
+        
+        
         litres_per_min = (flow_frequency / 7.5); # (Pulse frequency x 60 min) / 7.5Q = flow rate in L/hour 
         log.debug("Sensor is running at " + str(litres_per_min) +"L/min - total ticks in second " + str(flow_frequency))
         

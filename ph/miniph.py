@@ -13,6 +13,7 @@ import ConfigParser
 import argparse
 import os
 import sys
+import time
 
 class MiniPH(object):
     '''
@@ -44,11 +45,22 @@ class MiniPH(object):
         return adc_result
 
     def calibratePH4(self):
-        self.pH4Cal=self.readRawValue()
+        rawvalue=0
+        for count in range(1,100):
+            rawvalue = rawvalue + self.readRawValue()
+            time.sleep(0.1)
+        
+        self.pH4Cal=rawvalue / count
         self.calculateSlope()
     
     def calibratePH7(self):
-        self.pH7Cal=self.readRawValue()
+        rawvalue=0
+        for count in range(1,100):
+            rawvalue = rawvalue + self.readRawValue()
+            time.sleep(0.1)
+       
+        self.pH7Cal = rawvalue / count
+       
         self.calculateSlope()
     
     def calculateSlope(self):
@@ -141,14 +153,14 @@ if __name__ == '__main__':
                 phi2c.readConfig(args.configfile)
             phi2c.calibratePH4()
             phi2c.writeConfig(args.configfile)
-            print "Calibrated PH4 point and wrote config %s" & args.configfile
+            print "Calibrated PH4 point and wrote config %s" % args.configfile
     elif args.ph7:
             phi2c = MiniPH(args.address, args.busid)
             if os.path.exists(args.configfile):
                 phi2c.readConfig(args.configfile)
             phi2c.calibratePH7()
             phi2c.writeConfig(args.configfile)        
-            print "Calibrated PH7 point and wrote config %s" & args.configfile
+            print "Calibrated PH7 point and wrote config %s" % args.configfile
             
             
             

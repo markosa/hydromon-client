@@ -10,6 +10,7 @@ import smbus
 import time
 import os
 from ph.miniph import MiniPH
+import numpy
 
 log = logging.getLogger(__name__)
 
@@ -45,8 +46,6 @@ class PH():
         
         if not os.path.exists(self.i2c_configuration):
             raise IOError("Configuration file %s does not exist" % self.i2c_configuration)
-
-        
         
         log.info("Initializing i2c ph interface at %s" + str(self.i2c_address) )
         self.miniph = MiniPH(self.i2c_address, self.i2c_smbusid)
@@ -55,28 +54,30 @@ class PH():
         log.info("init passed")
         
     def testConfig(self):
+    
         pass
-     
-        
+         
     def read(self):
         ':type miniph: ph.miniph.MiniPH'
         
-        
+        phvalues = []
         ph = 0
         for count in range(1,self.use_average + 1):
             tmpph = self.miniph.readPH()
+            phvalues.append(tmpph)
             log.debug("PH: %s" % str(tmpph))
             ph = ph + tmpph
-            time.sleep(2)
+            time.sleep(0.5)
         
         ph = ph / count
         
+        roundedph = round(median(phvalues),2)
         log.debug("AVERAGE PH: " + str(ph))
-        
-        roundedph = round(ph,2)
-
         log.debug("ROUNDED PH: " + str(roundedph))
-
+        log.debug("MEDIAN PH: " + str(median(phvalues)))
+ 
         return roundedph
 
     
+def median(lst):
+    return numpy.median(numpy.array(lst))

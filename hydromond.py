@@ -14,6 +14,8 @@ from net.hydromon.thread.sensorthread import SensorThread
 from net.hydromon.thread.readerthread import ReaderThread
 import argparse
 from net.hydromon.flush import flush
+import traceback
+import time
 
 log = logging.getLogger(__name__)
 
@@ -22,10 +24,10 @@ THREADS = []
 
 def setupLogging():
     root = logging.getLogger()
-    root.setLevel(logging.DEBUG)
+    root.setLevel(logging.INFO)
     
     ch = logging.StreamHandler(sys.stdout)
-    ch.setLevel(logging.DEBUG)
+    ch.setLevel(logging.INFO)
     formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
     ch.setFormatter(formatter)
     root.addHandler(ch)
@@ -70,6 +72,9 @@ def loadModules():
         except:
             log.error("Error in loading module %s" % sensor.module)
             log.error("Error:", sys.exc_info()[0])
+            log.error("Error:", sys.exc_info())
+            exc_type, exc_value, exc_traceback = sys.exc_info()
+            traceback.print_exception(exc_type, exc_value, exc_traceback)
             sys.exit(4)
 
 def spawnThreads():
@@ -78,6 +83,7 @@ def spawnThreads():
         t = SensorThread("SensorThread #"+module.sensorId, module, ConfigurationUtil.READ_INTERVAL)
         t.start()
         log.info("Spawned thread: " + str(t))
+        time.sleep(2)
         THREADS.append(t)
         
     readerThread = ReaderThread("Reader#1", THREADS, ConfigurationUtil.SEND_INTERVAL)
@@ -108,7 +114,6 @@ if __name__ == '__main__':
 
     
     if args.flush:
-        print "foo"
         flush.flush()
     else:
         main()
