@@ -31,8 +31,12 @@ class ReaderThread(threading.Thread):
     def run(self):
         
         while True:
+            log.debug("** ReaderThread %s running" % (self.threadId))
             if (self.exitFlag):
+                log.fatal("Received exit notification")
                 thread.exit()
+            
+            log.debug("Threads to run: " + str(len(self.threads)))
             
             for t in self.threads:
                 ': :type t: net.hydromon.thread.sensorthread.SensorThread'
@@ -43,6 +47,9 @@ class ReaderThread(threading.Thread):
                     log.debug("Thread has not yet processed any data: " + str(t))
             
             time.sleep(float(self.readInterval))
+            
+            
+        log.fatal("Thread GONE")
             
             
     def stop(self):

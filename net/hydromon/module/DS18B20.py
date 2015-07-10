@@ -59,7 +59,7 @@ class DS18B20():
                 temp_c = float(temp_string) / 1000.0 
                 log.debug(self.serial+": "+ str(temp_c) +" C")
                 
-        return temp_c
+        return round(temp_c,1)
         
 
     

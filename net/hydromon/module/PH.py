@@ -65,7 +65,7 @@ class PH():
         for count in range(1,self.use_average + 1):
             tmpph = self.miniph.readPH()
             phvalues.append(tmpph)
-            log.debug("PH: %s" % str(tmpph))
+            #log.debug("PH: %s" % str(tmpph))
             ph = ph + tmpph
             time.sleep(0.5)
         

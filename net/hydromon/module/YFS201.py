@@ -73,7 +73,7 @@ class YFS201():
         log.debug("Sensor is running at " + str(litres_per_min) +"L/min - total ticks in second " + str(flow_frequency))
         
         
-        return litres_per_min
+        return round(litres_per_min,1)
         
 
     

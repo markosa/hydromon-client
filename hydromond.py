@@ -16,6 +16,8 @@ import argparse
 from net.hydromon.flush import flush
 import traceback
 import time
+from datetime import datetime
+import signal
 
 log = logging.getLogger(__name__)
 
@@ -28,9 +30,17 @@ def setupLogging():
     
     ch = logging.StreamHandler(sys.stdout)
     ch.setLevel(logging.INFO)
+    
+    fh = logging.FileHandler('spam.log')
+    fh.setLevel(logging.INFO)
+    
+    
     formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
     ch.setFormatter(formatter)
+    fh.setFormatter(formatter)
+
     root.addHandler(ch)
+    root.addHandler(fh)
     
     logging.getLogger("requests").setLevel(logging.WARNING)
 
@@ -99,11 +109,27 @@ def initializeDatadirectory():
         log.error("%s is not writable")
         sys.exit(5)
 
+def handler(signum, frame):
+    printStatistics()
+    
+def printStatistics():
+    log.info("** Statistics **")
+    for t in THREADS:
+        ': :type t: net.hydromon.thread.sensorthread.SensorThread'
+        log.info("%s#%s: %s" % (str(t.module.__class__), str(t.module.sensorId), str(t.value)))
 
 def main():   
     loadModules()
     spawnThreads()
-    testVar = raw_input("Ask user for something.")
+    log.info("Registering signal.SIGALRM - Use for statistics")
+    signal.signal(signal.SIGALRM, handler)
+    
+    while True:
+        if datetime.now().minute == 0:
+            printStatistics()
+        
+        time.sleep(float(60))
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()

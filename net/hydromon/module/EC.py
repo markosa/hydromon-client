@@ -105,7 +105,7 @@ class EC():
         for count in range(1,self.use_average + 1):
             tmpec = self.miniec.readEC()
             ecvalues.append(tmpec)
-            log.debug("EC: %s" % str(tmpec))
+            #log.debug("EC: %s" % str(tmpec))
             ec = ec + tmpec
             time.sleep(0.5)
         
@@ -121,9 +121,9 @@ class EC():
         solutionTemperature = self.readTemperature()
 
         compensatedEC = self.calcTemperatureCompensation(medianEC, solutionTemperature)
-        log.info("TEMPERATURE: " + str(solutionTemperature) )
-        log.info("MEDIAN EC: " + str(medianEC))
-        log.info("COMPENSATED EC: " + str(compensatedEC))
+        log.debug("TEMPERATURE: " + str(solutionTemperature) )
+        log.debug("MEDIAN EC: " + str(medianEC))
+        log.debug("COMPENSATED EC: " + str(compensatedEC))
  
         return round(compensatedEC, 2)
 
@@ -131,10 +131,10 @@ class EC():
         Tcal = self.ec_calibration_temperature
         ecTcal = 1.1413;
         T = temperature
-        log.info("EC" + str(ec))
-        log.info("Tcal" + str(Tcal))
-        log.info("T" + str(T))
-        log.info("alpha" + str(self.temperature_compensation_alpha))
+        log.debug("EC: " + str(ec))
+        log.debug("Tcal: " + str(Tcal))
+        log.debug("T: " + str(T))
+        log.debug("alpha: " + str(self.temperature_compensation_alpha))
 
         ''' https://en.wikipedia.org/wiki/Electrical_conductivity_meter#Temperature_dependence '''
         

@@ -9,20 +9,27 @@ import requests
 
 from net.hydromon.config import ConfigurationUtil
 import os
-from requests.exceptions import ConnectionError
+from requests.exceptions import ConnectionError, RequestException
+import sys
+import traceback
+from time import strftime
+import datetime
 
 log = logging.getLogger(__name__)
 def send(valuedto):
-    print "Sending data"
     payload = json.dumps(valuedto, default=serialize_valuedto, indent=2)
     endpointUrl = ConfigurationUtil.getAddValueEndpointUrl(valuedto.sensorId)
     log.debug("Sending data: " + payload + " to " + endpointUrl)
     response = None
     
     try:
-        response = requests.post(endpointUrl, payload, timeout=10)
-    except ConnectionError as ce:
-        log.fatal(ce)
+        response = requests.post(endpointUrl, payload, timeout=20)
+    except RequestException as re:
+        log.fatal(re)
+    except:
+        log.fatal("Unknown error occurred!")
+        exc_type, exc_value, exc_traceback = sys.exc_info()
+        traceback.print_exception(exc_type, exc_value, exc_traceback)
     finally:
         if response is not None:
             log.debug(response)
@@ -49,7 +56,9 @@ def handleError(valuedto):
         log.error("Unable to write emergency data in %s" % savedir)
         return
     
-    filename = savedir + "/sensordata_" + str(valuedto.time) + ".json" 
+    date = datetime.datetime.fromtimestamp(valuedto.time / 1e3)
+    filename = savedir + "/sensordata_" + strftime("%m%d%Y_%H%M%S",date.timetuple()) + ".json" 
+
     payload = json.dumps(valuedto, default=serialize_valuedto, indent=2)
     
     f = open(filename, 'w')
